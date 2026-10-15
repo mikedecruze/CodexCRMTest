@@ -24,6 +24,7 @@ export class AuditLog {
   @one(() => ClientGroup, { optional: true }) group?: ClientGroup;
   @uuid({ optional: false }) actor_id!: string;
   @one(() => Employee, { optional: false }) actor!: Employee;
+  @text({ max: 40 }) accessClassification!: string;
   @text({ max: 1000, optional: false }) action!: string;
   @uuid({ optional: false }) recordId!: string;
   @text({ max: 8000, optional: true }) beforeJson?: string;

@@ -197,8 +197,7 @@ export function HomePage({
             <p>
               <strong>A focused foundation</strong>
               <br />
-              Tasks, meetings, financials and contract alerts arrive in
-              subsequent phases.
+              Tasks, meetings and contract alerts arrive in subsequent phases.
             </p>
           </div>
         </section>

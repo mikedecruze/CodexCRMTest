@@ -1,6 +1,7 @@
 import { DatabaseSync } from "node:sqlite";
 import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
+import { migrateFinancial } from "./financial/db.ts";
 export function openDb(path: string) {
   if (path !== ":memory:") mkdirSync(dirname(path), { recursive: true });
   const db = new DatabaseSync(path);
@@ -39,6 +40,7 @@ CREATE INDEX IF NOT EXISTS household_group ON household(groupId);
   }[];
   if (!columns.some((c) => c.name === "mode"))
     db.exec("ALTER TABLE session ADD COLUMN mode TEXT NOT NULL DEFAULT 'demo'");
+  migrateFinancial(db);
   return db;
 }
 export type Db = ReturnType<typeof openDb>;

@@ -19,6 +19,10 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import type { Audit, Bootstrap, GroupDetail } from "../../shared/types";
 import { api, dateLabel, dateToday, initials } from "../api";
+import {
+  FinancialOverview,
+  FinancialTeaser,
+} from "../components/financial/FinancialOverview";
 import { RelationshipGraph } from "../components/Graph";
 import { type FormRequest } from "../components/RecordForm";
 
@@ -29,9 +33,11 @@ const tabs = [
   "Family & Households",
   "Entities & Ownership",
   "Advisors & Stakeholders",
+  "Financial Overview",
 ];
 
 export function GroupProfile({
+  boot,
   version,
   onForm,
   onParty,
@@ -43,7 +49,7 @@ export function GroupProfile({
 }) {
   const { id } = useParams(),
     [params, setParams] = useSearchParams(),
-    tab = [0, 1, 2, 3].includes(Number(params.get("tab") || 0))
+    tab = [0, 1, 2, 3, 4].includes(Number(params.get("tab") || 0))
       ? Number(params.get("tab") || 0)
       : 0,
     asOf = params.get("asOf") || dateToday();
@@ -285,6 +291,11 @@ export function GroupProfile({
       )}
       {tab === 0 && (
         <>
+          <FinancialTeaser
+            groupId={group.id}
+            asOf={asOf}
+            onOpen={() => change("tab", "4")}
+          />
           <div className="profile-stat-grid">
             {[
               {
@@ -441,8 +452,8 @@ export function GroupProfile({
                   </div>
                 </dl>
                 <p className="scope-text">
-                  Financials, contracts, tasks and activities are planned for
-                  subsequent phases.
+                  Contracts, tasks and activities are planned for subsequent
+                  phases.
                 </p>
               </section>
             </div>
@@ -867,6 +878,14 @@ export function GroupProfile({
             />
           )}
         </>
+      )}
+      {tab === 4 && (
+        <FinancialOverview
+          key={group.id}
+          boot={boot}
+          group={group}
+          asOf={asOf}
+        />
       )}
       <div className="below-table">
         <ShieldCheck size={15} />

@@ -263,6 +263,25 @@ export class Service {
         ))
     );
   }
+  canViewProfitability(user: Employee, groupId: string) {
+    if (!this.canRead(user, groupId)) return false;
+    return (
+      user.level === "Partner" ||
+      user.level === "Director" ||
+      !!this.one(
+        "SELECT id FROM client_group WHERE id=? AND managerId=?",
+        groupId,
+        user.id,
+      ) ||
+      !!this.one(
+        `SELECT id FROM profitability_grant x WHERE groupId=? AND employeeId=? AND x.revokedAt IS NULL AND ${active("x")}`,
+        groupId,
+        user.id,
+        today(),
+        today(),
+      )
+    );
+  }
   requireGroup(user: Employee, id: string, write = false) {
     if (!this.canRead(user, id)) throw new HttpError(404, "Record not found");
     if (write && !this.canEdit(user, id))
@@ -437,13 +456,17 @@ export class Service {
   }
   audit(user: Employee, groupId?: string) {
     if (groupId) this.requireGroup(user, groupId);
-    return this.rows<import("../shared/types.ts").Audit>(
-      "SELECT a.id,a.groupId,e.displayName actor,a.action,a.recordId,a.before,a.after,a.createdAt FROM audit_log a JOIN employee e ON e.id=a.actorId ORDER BY a.createdAt DESC",
+    return this.rows<
+      import("../shared/types.ts").Audit & { accessClassification: string }
+    >(
+      "SELECT a.id,a.groupId,a.accessClassification,e.displayName actor,a.action,a.recordId,a.before,a.after,a.createdAt FROM audit_log a JOIN employee e ON e.id=a.actorId ORDER BY a.createdAt DESC",
     )
       .filter(
         (a) =>
           (!groupId || a.groupId === groupId) &&
-          (a.groupId ? this.canRead(user, a.groupId) : user.role === "admin"),
+          (a.groupId ? this.canRead(user, a.groupId) : user.role === "admin") &&
+          (a.accessClassification !== "PROFITABILITY" ||
+            (!!a.groupId && this.canViewProfitability(user, a.groupId))),
       )
       .slice(0, 100);
   }
@@ -454,11 +477,13 @@ export class Service {
     recordId: string,
     before: unknown,
     after: unknown,
+    accessClassification = "GENERAL",
   ) {
     insert(this.db, "audit_log", {
       id: randomUUID(),
       groupId,
       actorId: user.id,
+      accessClassification,
       action,
       recordId,
       before: before ? JSON.stringify(before) : null,

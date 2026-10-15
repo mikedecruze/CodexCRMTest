@@ -147,8 +147,8 @@ export function SignIn({ onSignedIn }: { onSignedIn: () => void }) {
             Team-restricted access · Private by design
           </div>
           <small>
-            Phase 1 · Core relationships. Financial and workflow modules will
-            follow.
+            Phase 2 · Core relationships and historical financials. Contracts
+            and workflows follow.
           </small>
         </div>
       </div>

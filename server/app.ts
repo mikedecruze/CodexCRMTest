@@ -1,4 +1,6 @@
 import express from "express";
+import { registerFinancialRoutes } from "./financial/routes.ts";
+import { MockFabricConnector } from "./financial/connector.ts";
 import type { Request, Response, NextFunction } from "express";
 import {
   createHash,
@@ -239,6 +241,11 @@ export function createApp(db: Db, options: AppOptions) {
     next();
   });
   const user = (res: Response) => res.locals.user as Employee;
+  registerFinancialRoutes(
+    app,
+    service,
+    options.demo ? new MockFabricConnector() : null,
+  );
   app.post("/api/auth/logout", (req, res) => {
     db.prepare("DELETE FROM session WHERE tokenHash=?").run(
       hash(cookies(req).trove_session || ""),

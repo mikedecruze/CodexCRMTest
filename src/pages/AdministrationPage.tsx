@@ -1,4 +1,5 @@
 import { Clock3, Plus, ShieldCheck, Users } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { Audit, Bootstrap, Reference } from "../../shared/types";
 import { api, dateLabel } from "../api";
@@ -66,10 +67,9 @@ export function Administration({
         title="Administration"
         description="Maintain consistent definitions, team access and an accountable record of change."
         action={
-          <Badge tone="sage">
-            <ShieldCheck size={13} />
-            Administrator
-          </Badge>
+          <Link className="btn" to="/admin/financial">
+            Financial data & imports
+          </Link>
         }
       />
       <div className="profile-tabs">

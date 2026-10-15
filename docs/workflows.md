@@ -7,3 +7,9 @@ Use Family & Households and Entities & Ownership to inspect diagrams. Change the
 Financial, contract, service-line, activity, tasks and integration workflows are deferred; navigation does not imply those features exist.
 
 Users can update group name/status/SharePoint root, edit shared masters when authorized across every associated group, edit advisor group context, and end relationship, advisor or household-membership intervals with an audited reason. Dependent relationships must end before an advisor association can end. Default business-date selection is America/New_York.
+
+## Phase 2 workflows
+
+Open Financial Overview on a Client Group. Choose the business as-of date and optionally apply a Known at timestamp. Compare monthly or quarterly source measures, inspect original observations and revisions, record a reasoned override, and withdraw it without deleting source history. Staffing tables show monthly average and annualized equivalent separately, with month coverage. Service history changes are effective-dated independently of financial values.
+
+Reporting filters authorized families by Partner, Relationship Manager, team, client status and active historical service line. Financial Administration reviews synthetic source schemas, explicitly approves mappings, runs idempotent mock imports, inspects batches/exceptions, manages service-line categories and versioned staffing lookback, and grants/revokes explicit profitability scope. Contracts, initiatives, tasks and activity logging remain deferred.

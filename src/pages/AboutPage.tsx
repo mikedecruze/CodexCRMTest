@@ -9,7 +9,7 @@ export function AboutPage() {
       <PageHeading
         eyebrow="ABOUT THIS WORKSPACE"
         title="A foundation for lasting relationships."
-        description="Trove Relationship Manager · Phase 1"
+        description="Trove Relationship Manager · Phase 2"
       />
       <section className="panel about-panel">
         <Leaf size={30} />
@@ -18,7 +18,9 @@ export function AboutPage() {
           This working development application uses synthetic families, people,
           entities and advisors. It includes persistent relationship records,
           effective-dated ownership, household membership, search, scoped
-          authorization and an audit trail.
+          authorization and an audit trail. Phase 2 adds immutable financial
+          observations, attributed overrides, service history, staffing measures
+          and portfolio reporting against mock Fabric data.
         </p>
         <h3>Development and authentication</h3>
         <p>
@@ -30,9 +32,9 @@ export function AboutPage() {
         </p>
         <h3>Coming in subsequent phases</h3>
         <p>
-          Historical financials and Fabric source mapping, contracts, service
-          coordination, initiatives, activities and reporting are intentionally
-          deferred. No datalake is connected.
+          Contracts, service coordination, initiatives and activities remain
+          deferred. Financial source mappings and the read-only connector
+          contract currently use synthetic data; no real datalake is connected.
         </p>
         <Link className="text-link" to="/groups">
           Return to client groups

@@ -1,6 +1,6 @@
 # Trove Relationship Manager
 
-A functioning **Phase 1 development application**, built from Microsoft's Rayfin 1.36.2 React/TypeScript scaffold. It uses a persistent local API and **synthetic data only**. No MS Fabric datalake is connected.
+A functioning **Phase 1–2 development application**, built from Microsoft's Rayfin 1.36.2 React/TypeScript scaffold. It uses a persistent local API and **synthetic data only**. No MS Fabric datalake is connected.
 
 ## Run locally
 
@@ -36,6 +36,20 @@ Changes persist in ignored `.data/trove.sqlite`. Seed initialization is transact
 - Bounded/paginated directories, saved filters scoped to the current user, profile drawers, and responsive layouts.
 - Entra OIDC code-flow implementation with PKCE, nonce/state, JWS signature validation and pre-provisioned employee mapping. Its protocol behavior is tested against a simulated identity provider; **a real tenant sign-in has not been tested**.
 
+## Phase 2 financials
+
+Open a Client Group → **Financial Overview**. The primary as-of date selects business time; **Known at** limits what had been recorded. The initial mock history spans January 2024–September 2026. A useful example is Smith Family at 2025-12-31: Family Office ARR is $286,000 at knowledge date 2026-01-07, an attributed $315,000 override at 2026-01-20, and a separately preserved $290,000 source correction at 2026-02-05.
+
+- Immutable source observations, source revisions and append-only attributed overrides/withdrawals.
+- Monthly and quarterly trends/tables, component-based margins, source-defined mock realization and separate monthly-average/annualized staffing hours.
+- Effective-dated service status independent of ARR, with explicit quality warnings.
+- Reporting by authorized family/team/Partner/RM/active service line, including ARR, net worth distribution and permitted profitability.
+- Financial Administration for explicit source mappings, unmatched records, idempotent mock imports, exceptions, service-line categories, staffing conventions and profitability grants.
+
+James Carter can view profitability as the assigned Relationship Manager; Diana Brooks qualifies as a Director. Oliver Chen and Sophia Reed can view general financials but cannot receive margin or labor-cost data without an explicit financial scope. Grants also require underlying group authorization. Administrator status alone does not grant profitability.
+
+The connector framework is an application-owned read interface with a verified mock implementation. No warehouse connection, production table name, cost rate or realization formula is invented. See [docs/financial-metrics.md](docs/financial-metrics.md) and [docs/source-mapping.md](docs/source-mapping.md).
+
 ## Verify
 
 ```sh
@@ -52,7 +66,7 @@ Playwright uses `/usr/bin/chromium` when available. Otherwise run `npx playwrigh
 
 ## Scope and integration status
 
-The full user-supplied requirements are retained in [docs/master-build-prompt.md](docs/master-build-prompt.md). Phase 2 financials/source mapping, Phase 3 contracts and Phase 4 workflow/activities are intentionally deferred. Financial or workflow seed values have not been introduced before their modules.
+The full user-supplied requirements are retained in [docs/master-build-prompt.md](docs/master-build-prompt.md). Phase 2 financials/source mapping are implemented using a mock read-only adapter. Phase 3 contracts and Phase 4 workflow/activities remain deferred. Existing Phase 1 databases are upgraded additively; financial seed history is inserted once without resetting user records.
 
 The current executable backend is **Node/SQLite**, not a Fabric Function or Warehouse. The Rayfin model definitions compile and deny direct GraphQL access by default. The scaffold's supported Fabric authentication adapter is retained separately, but the working UI calls the local API. A supported Fabric repository/Functions adapter, tenant provisioning and deployed authorization validation remain required before Fabric deployment. `build:fabric` deliberately fails with that explanation; it cannot accidentally publish a nonfunctional or insecure demo bundle.
 
@@ -69,8 +83,8 @@ The API binds to loopback and expects an HTTPS reverse proxy routing `/api` and 
 
 - `src/pages`: Home, directories, Client Group profile and administration.
 - `src/components`: forms, profile drawer, interactive diagrams and UI primitives.
-- `server`: normalized SQLite schema, transactional domain service, access controls, auth and synthetic seed.
-- `shared/types.ts`: typed UI/API contracts.
+- `server`: normalized SQLite schema, transactional domain service, access controls, auth and synthetic seed. `server/financial` owns temporal metrics, mock ingestion and financial routes.
+- `shared/types.ts` and `shared/financial.ts`: typed UI/API contracts.
 - `rayfin/data`: supported decorator-based entities and explicit junctions, with direct access denied.
 - `docs`: architecture, ERD, security, deferred integrations, scope and open decisions.
 

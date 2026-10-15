@@ -1,5 +1,6 @@
 import {
   Building2,
+  BarChart3,
   Check,
   ChevronRight,
   CircleHelp,
@@ -20,6 +21,8 @@ import type { Bootstrap, GroupDetail } from "../shared/types";
 import { api, ApiError, post } from "./api";
 import { RecordForm, type FormRequest } from "./components/RecordForm";
 
+import { FinancialReporting } from "./pages/FinancialReportingPage";
+import { FinancialAdmin } from "./pages/FinancialAdminPage";
 import { GlobalSearch } from "./components/GlobalSearch";
 import { PartyDrawer } from "./components/PartyDrawer";
 import { SignIn } from "./components/SignIn";
@@ -119,6 +122,7 @@ export default function App() {
             { to: "/individuals", label: "Individuals", Icon: Users },
             { to: "/entities", label: "Entities & Trusts", Icon: Landmark },
             { to: "/advisors", label: "Advisors", Icon: Building2 },
+            { to: "/reporting", label: "Reporting", Icon: BarChart3 },
           ].map(({ to, label, Icon }) => (
             <NavLink key={to} to={to} end={to === "/"}>
               <Icon size={18} />
@@ -141,10 +145,10 @@ export default function App() {
             <Leaf size={20} />
             <strong>A foundation for connection</strong>
             <p>Core relationships, one clear view.</p>
-            <Badge tone="sage">PHASE 1</Badge>
+            <Badge tone="sage">PHASE 2</Badge>
           </div>
           <div className="sidebar-foot">
-            <ShieldCheck size={15} /> Internal workspace<span>v0.1</span>
+            <ShieldCheck size={15} /> Internal workspace<span>v0.2</span>
           </div>
         </div>
       </aside>
@@ -251,6 +255,14 @@ export default function App() {
                 />
               }
             />
+            <Route
+              path="/reporting"
+              element={<FinancialReporting boot={boot} />}
+            />
+            <Route
+              path="/admin/financial"
+              element={<FinancialAdmin boot={boot} />}
+            />
             <Route path="/about" element={<AboutPage />} />
             <Route
               path="*"
@@ -269,7 +281,7 @@ export default function App() {
             <LockKeyhole size={12} /> Your view includes only authorized client
             relationships.
           </span>
-          <span>Core relationships · Phase 1</span>
+          <span>Relationships & financial history · Phase 2</span>
         </footer>
       </div>
       {form && (

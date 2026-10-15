@@ -1,6 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import type { Db } from "./db.ts";
 import { transaction } from "./db.ts";
+import { seedFinancial } from "./financial/seed.ts";
 export const seedId = (key: string) => {
   const s = createHash("sha256").update(`trove-fixture:${key}`).digest("hex");
   return `${s.slice(0, 8)}-${s.slice(8, 12)}-4${s.slice(13, 16)}-a${s.slice(17, 20)}-${s.slice(20, 32)}`;
@@ -14,8 +15,10 @@ export function insert(db: Db, table: string, row: Record<string, unknown>) {
 export function seed(db: Db) {
   if (
     (db.prepare("SELECT count(*) AS n FROM employee").get() as { n: number }).n
-  )
+  ) {
+    seedFinancial(db);
     return;
+  }
   transaction(db, () => {
     const stamp = "2026-01-15T12:00:00.000Z";
     const dates = { createdAt: stamp, updatedAt: stamp };
@@ -485,4 +488,5 @@ export function seed(db: Db) {
       createdAt: stamp,
     });
   });
+  seedFinancial(db);
 }
