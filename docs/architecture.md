@@ -1,0 +1,7 @@
+# Architecture
+
+Phase 1 is a React 19 / TypeScript application, scaffolded with Microsoft create-rayfin 1.36.2 (todoapp). A same-origin Node/Express API provides a working local vertical slice with persistent SQLite synthetic records. Domain invariants and authorization execute on the server, inside database transactions, never only in React. UUIDs identify records; timestamps and an append-only audit trail track mutations. `shared/types.ts` defines the client boundary. The UI is separated into page modules, reusable forms, master-record drawers, graphs and UI primitives.
+
+The local API is a deliberate development adapter, not a claimed Fabric database or deployed Function. The Rayfin schema uses installed, supported TC39 decorators and explicit junction entities. Direct client access to those future tables is denied until a reviewed server-side authorization/transaction strategy is deployed. No production Fabric identifiers have been invented. See fabric-integration.md for the remaining deployment boundary.
+
+The API authenticates opaque, hashed, expiring cookie sessions. Demo personas are available only with explicit TROVE_DEMO=1 outside production. Entra uses server-side OIDC authorization code + PKCE, state and nonce validation, tenant/audience/signature verification through openid-client; it requires an actual tenant registration. Source data remains synthetic in either mode. Financials, contracts, activities and recurrence are deliberately outside this phase.
